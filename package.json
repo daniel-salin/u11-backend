@@ -2,8 +2,9 @@
   "name": "u11-backend",
   "version": "1.0.0",
   "description": "the backend for u11",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
+    "start": "node .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
