@@ -8,6 +8,7 @@ import json
 import time
 import cv2
 import os
+import sys
 
 camera = PiCamera()
 camera.resolution = tuple([640,
@@ -18,6 +19,7 @@ rawCapture = PiRGBArray(camera, size=tuple([640,
                                             480]))
 
 print("[INFO] warming up...")
+sys.stdout.flush()
 time.sleep(2.5)
 avg = None
 lastSaved = datetime.datetime.now()
@@ -34,6 +36,7 @@ for f in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True
 
     if avg is None:
         print("[INFO] starting background model...")
+        sys.stdout.flush()
         avg = gray.copy().astype("float")
         rawCapture.truncate(0)
         continue
@@ -79,11 +82,19 @@ for f in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True
                 dirName = timestamp.strftime("%Y_%m_%d")
                 fileName = timestamp.strftime("%I_%M_%S")
 
-                if (os.path.isdir(f"./archive/{dirName}")):
-                    cv2.imwrite(f'./archive/{dirName}/{fileName}.jpg', frame)
+                if (os.path.isdir(f'./src/archive/{dirName}')):
+                    cv2.imwrite(
+                        f'./src/archive/{dirName}/{fileName}.jpg', frame)
+                    print(
+                        f'{dirName}__{fileName}.jpg__{fileName}')
+                    sys.stdout.flush()
                 else:
-                    os.makedirs(f"./archive/{dirName}")
-                    cv2.imwrite(f'./archive/{dirName}/{fileName}.jpg', frame)
+                    os.makedirs(f'./src/archive/{dirName}')
+                    cv2.imwrite(
+                        f'./src/archive/{dirName}/{fileName}.jpg', frame)
+                    print(
+                        f'{dirName}__{fileName}.jpg__{fileName}')
+                    sys.stdout.flush()
                 # update the last uploaded timestamp and reset the motion
                 # counter
                 lastSaved = timestamp
