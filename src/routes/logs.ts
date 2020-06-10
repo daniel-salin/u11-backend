@@ -16,11 +16,11 @@ router.get("/", async (_req: Request, res: Response, _next: NextFunction) => {
 
 // GET ALL
 router.get(
-  "/:logId",
+  "/:date",
   async (req: Request, res: Response, _next: NextFunction) => {
     try {
-      const logId = req.params.logId;
-      const log = await Log.findById(logId);
+      const date = req.params.date;
+      const log = await Log.find({ date: date });
       res.json(log);
     } catch (err) {
       res.json({ message: err });
