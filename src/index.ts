@@ -13,32 +13,34 @@ const jwks = require("jwks-rsa");
 const Log = require("./models/Log");
 
 // MIDDLEWARES
-const _jwtCheck = jwt({
+const jwtCheck = jwt({
   secret: jwks.expressJwtSecret({
     cache: true,
     rateLimit: true,
     jwksRequestsPerMinute: 5,
     jwksUri: process.env.JWKS_URI,
   }),
-  audience: process.env.JWKS_ISSUER,
+  audience: process.env.JWKS_AUDIENCE,
   issuer: process.env.JWKS_ISSUER,
   algorithms: ["RS256"],
 });
 
-//app.use(jwtCheck);
+app.use(jwtCheck);
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // ROUTES
-// app.use((err: any, req: any, res: any, next: any) => {
-//   if (err.name === 'UnauthorizedError') {
-//     console.log(req.user)
-//     res.status(err.status).send(err);
-//     return;
-//   }
-//   next();
-// });
+app.use((err: any, req: any, res: any, next: any) => {
+  if (err.name === "UnauthorizedError") {
+    console.log(req);
+    const path = require("path");
+    console.log(err);
+    res.status(err.status).sendFile(__dirname + path.join("/errorPage.html"));
+    return;
+  }
+  next();
+});
 
 app.use("/logs", logsRoute);
 app.use("/images", imagesRoute);
