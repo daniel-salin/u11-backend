@@ -16,7 +16,6 @@ router.get(
     const imageFilePath = __dirname + `/../archive/${imagePath}.jpg`;
 
     if (fs.existsSync(imageFilePath)) {
-      console.log("file exists");
       res.sendFile(imageFile, options);
     } else {
       res.send("File does not exist on unit");

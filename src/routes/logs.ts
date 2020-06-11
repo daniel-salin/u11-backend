@@ -7,7 +7,6 @@ const Log = require("../models/Log");
 router.get("/", async (_req: Request, res: Response, _next: NextFunction) => {
   try {
     const logs = await Log.find();
-    console.log(logs);
     res.json(logs);
   } catch (err) {
     res.json({ message: err });

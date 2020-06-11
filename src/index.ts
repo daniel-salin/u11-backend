@@ -33,7 +33,6 @@ app.use(bodyParser.json());
 // ROUTES
 app.use((err: any, req: any, res: any, next: any) => {
   if (err.name === "UnauthorizedError") {
-    console.log(req);
     const path = require("path");
     console.log(err);
     res.status(err.status).sendFile(__dirname + path.join("/errorPage.html"));
@@ -47,7 +46,6 @@ app.use("/images", imagesRoute);
 
 // CONNECT TO DB
 const mongoURI = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER_URL}/${process.env.DB_NAME}?retryWrites=true&w=majority`;
-console.log(mongoURI);
 
 try {
   mongoose.connect(
